@@ -1,0 +1,49 @@
+<div class="mb-4 text-center" *ngIf="!((orders$ | async)?.length)">
+    <h3>No Fish & Chips orders, add one to get started.</h3>
+</div>
+
+<div class="mb-5 text-center"> 
+    <button class="btn btn-primary" (click)="createOrder()">CREATE NEW ORDER</button>
+</div>
+
+<!-- FLEX STYLE -->
+<div class="d-flex flex-row flex-wrap justify-content-center">
+
+<div class="card text-left m-3" style="width: 20rem" *ngFor="let order of orders$ | async" [ngClass]="{ 'border-warning' : notsaved !== null && notsaved === order.id }">
+  <img class="card-img-top" src="/assets/{{order.image}}" alt="">
+  <div class="card-header">
+      Order ID : {{ order.id }}
+    </div>
+  <div class="card-body" [ngClass]="{ 'text-warning' : notsaved !== null && notsaved === order.id }">
+    <h5>Order Details</h5>
+    <div class="mb-2 card-text">
+      <div class="row align-items-center mb-2">
+        <div class="col-md-6">Quantity</div>
+        <div><input #quantity type="text" [value]="order.quantity" class="form-control" style="width: 3rem;" (change)="notsaved=orderUpdated(order.id, quantity.value, tsyes.checked)"></div>
+      </div>
+      <div class="row mb-3">  
+        <div class="col-md-6 pr-1">Tomato Sauce</div>
+        <div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input #tsyes type="radio" id="tsyes{{order.id}}" name="tsradio{{order.id}}" class="custom-control-input" [checked]="order.includeTomatoSauce" (click)="notsaved=orderUpdated(order.id, quantity.value, tsyes.checked)">
+                <label class="custom-control-label" for="tsyes{{order.id}}">Yes</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input #tsno type="radio" id="tsno{{order.id}}" name="tsradio{{order.id}}" class="custom-control-input" [checked]="!order.includeTomatoSauce" (click)="notsaved=orderUpdated(order.id, quantity.value, tsyes.checked)">
+                <label class="custom-control-label" for="tsno{{order.id}}">No</label>
+              </div>
+        </div>    
+      </div>
+    </div>
+    <a href="#" class="card-link" (click)="notsaved=saveOrder(order.id, quantity.value, tsyes.checked)">UPDATE THIS ORDER</a>  
+  </div>
+</div>
+
+</div>
+
+<div style="height: 4rem"><br></div>
+
+
+
+
+
